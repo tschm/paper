@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from copier import run_copy
 
@@ -16,9 +18,11 @@ def repo(tmp_path):
 
 def test_repo(repo):
     #run_copy(".", tmp_path, data={"project_name": "maffay"})
+	assert Path(".pre-commit-config.yaml") in repo
+	assert Path("Makefile") in repo
+	assert Path(".gitignore") in repo
+	assert Path("README.md") in repo
 
-	print(repo)
-	assert False
 
 
 
