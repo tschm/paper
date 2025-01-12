@@ -2,7 +2,7 @@ import pytest
 from copier import run_copy
 
 
-pytest.fixture()
+@pytest.fixture()
 def repo(tmp_path):
     run_copy(".", tmp_path, data={"project_name": "maffay"})
     return tmp_path
