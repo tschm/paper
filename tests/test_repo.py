@@ -17,11 +17,11 @@ def repo(tmp_path):
 
 
 def test_repo(repo):
-	assert Path(".pre-commit-config.yaml") in repo
-	assert Path("Makefile") in repo
-	assert Path(".gitignore") in repo
-	assert Path("README.md") in repo
-	assert Path("paper/maffay.tex") in repo
-	assert Path("paper/references.bib") in repo
-	assert Path(".github/workflows/latex.yml")
-	assert Path(".github/workflows/pre-commit.yml") in repo
+    assert Path(".pre-commit-config.yaml") in repo
+    assert Path("Makefile") in repo
+    assert Path(".gitignore") in repo
+    assert Path("README.md") in repo
+    assert Path("paper/maffay.tex") in repo
+    assert Path("paper/references.bib") in repo
+    assert Path(".github/workflows/latex.yml")
+    assert Path(".github/workflows/pre-commit.yml") in repo
