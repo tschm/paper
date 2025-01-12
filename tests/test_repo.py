@@ -17,14 +17,11 @@ def repo(tmp_path):
 
 
 def test_repo(repo):
-    #run_copy(".", tmp_path, data={"project_name": "maffay"})
 	assert Path(".pre-commit-config.yaml") in repo
 	assert Path("Makefile") in repo
 	assert Path(".gitignore") in repo
 	assert Path("README.md") in repo
-
-
-
-
-    #    for file in file.iterdir():
-    #        print(file)
+	assert Path("paper/maffay.tex") in repo
+	assert Path("references.bib") in repo
+	assert Path(".github/workflows/latex.yml")
+	assert Path(".github/workflows/pre-commit.yml") in repo
