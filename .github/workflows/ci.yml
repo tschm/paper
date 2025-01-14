@@ -65,4 +65,3 @@ jobs:
 
       - name: Run fmt
         run: make fmt
-
