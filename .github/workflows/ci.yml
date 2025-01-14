@@ -30,8 +30,9 @@ jobs:
 
       - name: Run copier
         run: |
+          mkdir -p tmp/paper
           uv run copier copy . tmp/paper
-          cd /tmp/paper
+          cd tmp/paper
           ls -all
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # If you need to authenticate with GitHub, e.g., for a private template
