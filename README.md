@@ -25,4 +25,3 @@ Out of the box you get
 
 With every push into the repo the document is compiled
 and published on a draft branch.
-
