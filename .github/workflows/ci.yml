@@ -39,6 +39,7 @@ jobs:
 
       - name: Run help
         run: |
+          pwd
           cd tmp/paper
           make
           make help
@@ -47,9 +48,7 @@ jobs:
         run: |
           pwd
           cd tmp/paper
-          cat Makefile
           make install
-          cat paper/maffay.tex
           make compile
 
       - name: Run fmt
