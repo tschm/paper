@@ -22,3 +22,7 @@ Out of the box you get
     create  .github/workflows/latex.yml
     create  Makefile
 ```
+
+With every push into the repo the document is compiled
+and published on a draft branch.
+
