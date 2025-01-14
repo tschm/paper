@@ -44,16 +44,23 @@ def test_repo(repo):
 
 def test_compile(folder, repo):
     assert Path(folder / "Makefile").exists()
+    assert Path(folder / "paper" / "maffay.tex" ).exists()
     subprocess.run(["make", "-C", folder, "install"], check=True)
     subprocess.run(["make", "-C", folder, "compile"], check=True)
 
 def test_help(folder, repo):
+    assert Path(folder / "Makefile").exists()
     subprocess.run(["make", "-C", folder, "help"], check=True)
 
 
 def test_clean(folder, repo):
+    assert Path(folder / "Makefile").exists()
     subprocess.run(["make", "-C", folder, "clean"], check=True)
 
 
 def test_fmt(folder, repo):
-    subprocess.run(["make", "-C", folder, "fmt"], check=True)
+    assert Path(folder / "Makefile").exists()
+    assert Path(folder / ".pre-commit-config.yaml").exists()
+    #subprocess.run(["cat","Makefile"], check=True)
+    #subprocess.run(["cat","Makefile"], check=True)
+    subprocess.run(["make", "fmt"], check=True)
