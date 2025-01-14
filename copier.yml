@@ -1,9 +1,9 @@
 # additional questions
 ---
-# for questions
+# for adding your own questions
 # https://copier.readthedocs.io/en/stable/configuring/#prompt-templating
 
-#sheriff:
+# sheriff:
 #  type: str
 #  help: "Who shot the sheriff?"
 ---
