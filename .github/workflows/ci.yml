@@ -23,10 +23,22 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - name: Set up Python environment with uv
+      - name: Install copier
         shell: bash
         run: |
-          # Create venv
-          uv venv
-          uv pip install copier pytest
-          uv run pytest tests
+          uvx install copier
+
+      - name: Run copier
+        shell: bash
+        run: |
+          copier copy . /tmp/paper
+          cd /tmp/paper
+          ls -all
+
+      #- name: Set up Python environment with uv
+      #  shell: bash
+      #  run: |
+      #    # Create venv
+      #    uv venv
+      #    uv pip install copier pytest
+      #    uv run pytest tests
