@@ -49,4 +49,5 @@ jobs:
           cd tmp/paper
           cat Makefile
           make install
+          cat paper/maffay.tex
           make compile
