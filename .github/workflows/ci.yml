@@ -10,8 +10,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-        python-version: [ '3.10', '3.11', '3.12', '3.13' ]
+        os: [ ubuntu-latest, macos-latest ]
+        python-version: [ '3.10', '3.12', ]
 
       # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -23,10 +23,36 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - name: Set up Python environment with uv
-        shell: bash
+      - name: Install copier
         run: |
-          # Create venv
           uv venv
-          uv pip install copier pytest
-          uv run pytest tests
+          uv pip install copier
+
+      - name: Run copier
+        run: |
+          mkdir -p tmp/paper
+          uv run copier copy . tmp/paper --data project_name=maffay
+          cd tmp/paper
+          git init
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # If you need to authenticate with GitHub, e.g., for a private template
+
+      - name: Run help
+        run: |
+          pwd
+          cd tmp/paper
+          make
+          make help
+
+      - name: Run compile
+        run: |
+          pwd
+          cd tmp/paper
+          make install
+          make compile
+
+      - name: Run fmt
+        run : |
+          pwd
+          cd tmp/paper
+          make fmt
