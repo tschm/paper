@@ -31,7 +31,7 @@ jobs:
       - name: Run copier
         run: |
           mkdir -p tmp/paper
-          uv run copier copy . tmp/paper
+          uv run copier copy . tmp/paper --data project_name=maffay
           cd tmp/paper
           git init
         env:
