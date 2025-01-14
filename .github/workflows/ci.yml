@@ -46,4 +46,7 @@ jobs:
           make compile
 
       - name: Run fmt
-        run: make fmt
+        run: |
+          ls -all
+          pwd
+          make fmt
