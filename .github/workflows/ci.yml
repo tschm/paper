@@ -16,7 +16,6 @@ jobs:
       run:
         working-directory: tmp/paper
 
-
     steps:
       - name: Checkout [${{ github.repository }}]
         uses: actions/checkout@v4
@@ -38,14 +37,11 @@ jobs:
 
       - name: Run help
         run: |
-          pwd
-          cd tmp/paper
           make
           make help
 
       - name: Run compile
         run: |
-
           make install
           make compile
 
