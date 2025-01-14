@@ -51,3 +51,9 @@ jobs:
           make install
           cat paper/maffay.tex
           make compile
+
+      - name: Run fmt
+        run : |
+          pwd
+          cd tmp/paper
+          make fmt
