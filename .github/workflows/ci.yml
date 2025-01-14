@@ -25,6 +25,7 @@ jobs:
 
       - name: Install copier
         run: |
+          uv venv
           uv pip install copier
 
       - name: Run copier
