@@ -2,7 +2,7 @@
 
 venv:
 	@curl -LsSf https://astral.sh/uv/install.sh | sh
-	@uv venv
+	@uv venv --python '3.12'
 
 
 .PHONY: help
@@ -21,3 +21,8 @@ fmt: venv ## Run autoformatting and linting
 	@uv pip install pre-commit
 	@uv run pre-commit install
 	@uv run pre-commit run --all-files
+
+.PHONY: test
+test: venv  ## Testing
+	@uv pip install pytest copier
+	@uv run pytest tests
