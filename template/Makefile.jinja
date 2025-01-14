@@ -14,7 +14,7 @@ help:  ## Display this help screen
 # list the papers here
 .PHONY: compile
 compile: ## Compile document(s)
-	@tectonic paper/{{ project_name }}.tex
+	@./tectonic paper/{{ project_name }}.tex
 
 
 .PHONY: clean
@@ -24,7 +24,8 @@ clean: ## clean the folder
 
 .PHONY: install
 install: ## install tectonic
-	@curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net |sh
+	@curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh
+    @echo $PATH
 
 
 .PHONY: fmt
