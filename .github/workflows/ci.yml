@@ -39,11 +39,13 @@ jobs:
 
       - name: Run help
         run: |
+          cd tmp/paper
           make
           make help
 
       - name: Run compile
         run: |
+          cd tmp/paper
           pwd
           cat Makefile
           make install
