@@ -36,20 +36,6 @@ jobs:
           cd tmp/paper
           git init
 
-      - name: Install copier
-        run: |
-          uv venv
-          uv pip install copier
-
-      - name: Run copier
-        run: |
-          mkdir -p tmp/paper
-          uv run copier copy . tmp/paper --data project_name=maffay
-          cd tmp/paper
-          git init
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # If you need to authenticate with GitHub, e.g., for a private template
-
       - name: Run help
         run: |
           pwd
