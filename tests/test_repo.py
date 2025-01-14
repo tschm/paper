@@ -1,4 +1,5 @@
 import os
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -43,16 +44,16 @@ def test_repo(repo):
 
 def test_compile(folder, repo):
     assert Path(folder / "Makefile").exists()
-    os.system(f"make -C {folder} install")
-    os.system(f"make -C {folder} compile")
+    subprocess.run(["make", "-C", folder, "install"], check=True)
+    subprocess.run(["make", "-C", folder, "compile"], check=True)
 
 def test_help(folder, repo):
-    os.system(f"make -C {folder} help")
+    subprocess.run(["make", "-C", folder, "help"], check=True)
 
 
 def test_clean(folder, repo):
-    os.system(f"make -C {folder} clean")
+    subprocess.run(["make", "-C", folder, "clean"], check=True)
 
 
 def test_fmt(folder, repo):
-    os.system(f"make -C {folder} fmt")
+    subprocess.run(["make", "-C", folder, "fmt"], check=True)
