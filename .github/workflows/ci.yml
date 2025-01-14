@@ -1,27 +1,40 @@
 name: "ci"
 
 on:
-- push
+  push
 
 jobs:
   test:
-    # The type of runner that the job will run on
     runs-on: ${{ matrix.os }}
-
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ '3.10', '3.12', ]
+        python-version: [ '3.10', '3.12' ]
+      fail-fast: false
 
-      # Steps represent a sequence of tasks that will be executed as part of the job
+    defaults:
+      run:
+        working-directory: tmp/paper
+
+
     steps:
       - name: Checkout [${{ github.repository }}]
         uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
         with:
-          python-version: ${{ inputs.python-version }}
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install and run copier
+        working-directory: .
+        run: |
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir copier
+          mkdir -p tmp/paper
+          copier copy . tmp/paper --data project_name=maffay
+          cd tmp/paper
+          git init
 
       - name: Install copier
         run: |
@@ -46,13 +59,10 @@ jobs:
 
       - name: Run compile
         run: |
-          pwd
-          cd tmp/paper
+
           make install
           make compile
 
       - name: Run fmt
-        run : |
-          pwd
-          cd tmp/paper
-          make fmt
+        run: make fmt
+
