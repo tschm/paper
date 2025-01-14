@@ -34,6 +34,8 @@ jobs:
           copier copy . tmp/paper --data project_name=maffay
           cd tmp/paper
           git init
+          # otherwise the pre-commit hooks won't "see" files
+          git add .
 
       - name: Run help
         run: |
@@ -46,4 +48,7 @@ jobs:
           make compile
 
       - name: Run fmt
-        run: make fmt
+        run: |
+          ls -all
+          git status
+          make fmt
