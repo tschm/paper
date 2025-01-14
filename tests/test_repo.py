@@ -12,7 +12,7 @@ def folder(tmp_path: Path) -> Path:
 @pytest.fixture()
 def repo(folder):
     # Assuming `run_copy` is copying a folder to `tmp_path`
-    run_copy(str(Path(__file__).parent.parent), folder, data={"project_name": "maffay"}, vcs_ref="main")
+    run_copy(str(Path(__file__).parent.parent), folder, data={"project_name": "maffay"})
 
     commands = [
         "git init --initial-branch=main",
