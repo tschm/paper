@@ -30,7 +30,7 @@ jobs:
 
       - name: Run copier
         run: |
-          copier . tmp/paper
+          uv run copier . tmp/paper
           cd /tmp/paper
           ls -all
         env:
