@@ -45,19 +45,8 @@ jobs:
 
       - name: Run compile
         run: |
-          cd tmp/paper
           pwd
+          cd tmp/paper
           cat Makefile
           make install
           make compile
-
-      #- name: Run fmt
-      #  run: |
-      #    make fmt
-      #- name: Set up Python environment with uv
-      #  shell: bash
-      #  run: |
-      #    # Create venv
-      #    uv venv
-      #    uv pip install copier pytest
-      #    uv run pytest tests
