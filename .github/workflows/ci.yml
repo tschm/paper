@@ -44,12 +44,14 @@ jobs:
 
       - name: Run compile
         run: |
+          pwd
+          cat Makefile
           make install
           make compile
 
-      - name: Run fmt
-        run: |
-          make fmt
+      #- name: Run fmt
+      #  run: |
+      #    make fmt
       #- name: Set up Python environment with uv
       #  shell: bash
       #  run: |
