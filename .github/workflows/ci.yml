@@ -24,16 +24,16 @@ jobs:
           python-version: ${{ inputs.python-version }}
 
       - name: Install copier
-        shell: bash
         run: |
-          uvx install copier
+          uv pip install copier
 
       - name: Run copier
-        shell: bash
         run: |
-          copier copy . tmp/paper
+          copier . tmp/paper
           cd /tmp/paper
           ls -all
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # If you need to authenticate with GitHub, e.g., for a private template
 
       #- name: Set up Python environment with uv
       #  shell: bash
