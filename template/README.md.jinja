@@ -1,11 +1,16 @@
 # [Demo]({{ repository }}/blob/draft/{{ project_name }}.pdf)
 
-[![LaTeX]({{ repository }}/actions/workflows/latex.yml/badge.svg?branch=main)]({{ repository }}/actions/workflows/latex.yml)
+[![LaTeX]({{ repository }}/actions/workflows/latex.yml/badge.svg)]({{ repository }}/actions/workflows/latex.yml)
 [![Created with Cradle](https://img.shields.io/badge/Created%20with-Cradle-blue?style=flat-square)](https://github.com/tschm/paper)
 
 Remove or update the arxiv link
 
 [![arXiv](https://img.shields.io/badge/arXiv-2305.19484-b31b1b.svg)](https://arxiv.org/abs/2305.19484)
+
+## Abstract
+
+Include an abstract here...
+
 
 ## Link to a companion Python package
 
@@ -13,15 +18,20 @@ Please correct the link as you wish
 
 Companion [Python package](https://github.com/{{ username }})
 
-## Abstract
+## Getting started
 
-Include an abstract here...
+### **Update the README.md file**
 
-## About this repo
+Insert your abstract, add graphs, etc.
 
-We have a [workflow]({{ repository }}/.github/workflows/latex.yml)
-compiling the LaTeX document(s) in [paper](paper). For that step we are
-using [tectonic](https://github.com/tectonic-typesetting/tectonic).
-The resulting pdf documents are released
+### **Update the {{ project_name }}.tex file**
+
+Write some beautiful content and commit the file and lean back.
+We are using [tectonic](https://github.com/tectonic-typesetting/tectonic)
+to compile your files. The resulting pdf documents are released
 to the [draft branch]({{ repository }}/tree/draft)
 of the repo.
+
+### **Click on the header of your README.md file**
+
+The header links to your compiled document.
