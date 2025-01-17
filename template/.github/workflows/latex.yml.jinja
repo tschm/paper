@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
+
       - uses: ./actions/latex
         with:
 
