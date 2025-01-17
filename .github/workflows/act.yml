@@ -37,16 +37,15 @@ jobs:
           WORKFLOWS=$(find template/.github/workflows -name "*.yml" -o -name "*.yaml" | grep -v -E 'act\.yml')
 
           # Properly format multiline output for GitHub Actions
-          {
-            echo "workflows<<EOF"
-            echo "$WORKFLOWS"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+          echo "workflows<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$WORKFLOWS" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
-          echo $WORKFLOWS
+          echo "$WORKFLOWS" # Debugging output to show the workflows found
 
       - name: Run template workflows
         run: |
+          # Iterate over the workflows
           for workflow in ${{ steps.find-workflows.outputs.workflows }}; do
             echo "Testing workflow: $workflow"
             act -W "$workflow" -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
