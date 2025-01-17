@@ -44,6 +44,8 @@ jobs:
         working-directory: template
         run: |
 
+          ls -all
+
           # Find all workflows but exclude act.yml and the current workflow file
           WORKFLOWS=$(find .github/workflows -name "*.yml" -o -name "*.yaml" | grep -v -E 'act\.yml')
 
