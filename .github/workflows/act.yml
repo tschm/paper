@@ -46,21 +46,32 @@ jobs:
           git commit -m "Initial commit"
 
 
-      - name: Find template workflows
-        id: find-workflows
+#      - name: Find template workflows
+#        id: find-workflows
+#        working-directory: template
+#        run: |
+#
+#          ls -all
+#
+#          # Find all workflows but exclude act.yml and the current workflow file
+#          WORKFLOWS=$(find .github/workflows -name "*.yml" -o -name "*.yaml" | grep -v -E 'act\.yml')
+#
+#          for workflow in $WORKFLOWS; do
+#            echo "Testing workflow: $workflow"
+#            act -W "$workflow" -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
+#          done
+
+      - name: Run the pre-commit flow
+        id: flow_pre_commit
         working-directory: template
         run: |
+          act -W .github/pre-commit.yml -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
 
-          ls -all
-
-          # Find all workflows but exclude act.yml and the current workflow file
-          WORKFLOWS=$(find .github/workflows -name "*.yml" -o -name "*.yaml" | grep -v -E 'act\.yml')
-
-          for workflow in $WORKFLOWS; do
-            echo "Testing workflow: $workflow"
-            act -W "$workflow" -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
-          done
-
+      - name: Run the latex flow
+        id: flow_latex
+        working-directory: template
+        run: |
+          act -W .github/latex.yml -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest --input GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
 
       #- name: Run template workflows
       #  run: |
