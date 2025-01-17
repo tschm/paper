@@ -1,0 +1,20 @@
+name: Test Template Workflows
+
+on:
+  push:
+
+jobs:
+  test-template-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install act
+        run: |
+          curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+
+      - name: Find template workflows
+        id: find-workflows
+        run: |
+          WORKFLOWS=$(find .github/workflows -name "*.yml" -o -name "*.yaml" | grep -v "test-template-workflows.yml")
+          echo "workflows=$WORKFLOWS" >> "$GITHUB_OUTPUT"
