@@ -84,6 +84,11 @@ runs:
         restore-keys: |
           ${{ runner.os }}-tectonic-
 
+    - name: Verify input
+      shell: bash
+      run : |
+        echo ${{ inputs.GITHUB_TOKEN }}
+
     - name: Install Tectonic and dependencies
       uses: wtfjoke/setup-tectonic@v3
       with:
