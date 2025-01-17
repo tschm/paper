@@ -14,6 +14,7 @@ jobs:
           curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
           # Add the installation directory to PATH
           echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
+          echo "${{ github.workspace }}"
 
       - name: Verify act installation
         run: |
@@ -30,11 +31,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install --no-cache-dir -r requirements.txt
           mkdir -p template
+          ls -all
           copier copy . template --data-file .github/data.yaml
           cd template
           git init -b main
           # otherwise the pre-commit hooks won't "see" files
           git add .
+          ls -all
 
       - name: Find template workflows
         id: find-workflows
