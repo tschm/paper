@@ -65,13 +65,13 @@ jobs:
         id: flow_pre_commit
         working-directory: template
         run: |
-          act -W .github/pre-commit.yml -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
+          act -W .github/workflows/pre-commit.yml -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
 
       - name: Run the latex flow
         id: flow_latex
         working-directory: template
         run: |
-          act -W .github/latex.yml -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest --input GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          act -W .github/workflows/latex.yml -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest --input GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
 
       #- name: Run template workflows
       #  run: |
