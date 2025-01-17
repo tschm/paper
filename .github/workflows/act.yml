@@ -37,13 +37,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install --no-cache-dir -r requirements.txt
           mkdir -p template
-          ls -all
           copier copy . template --data-file .github/data.yaml
           cd template
-          git init -b main
           # otherwise the pre-commit hooks won't "see" files
+          # also act needs to have the commit in place
+          git init -b main
           git add .
-          ls -all
           git commit -m "Initial commit"
 
 

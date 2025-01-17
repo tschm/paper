@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: cvxgrp/.github/actions/latex@v2.0.3
+      - uses: cvxgrp/.github/actions/latex@v2.0.4
         with:
           paper: paper/{{ project_name }}.tex
-          GITHUB_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+          #GITHUB_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
           draft: draft
 
       # add or remove papers here
