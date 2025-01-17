@@ -38,6 +38,7 @@ jobs:
 
           for workflow in $WORKFLOWS; do
             echo "Testing workflow: $workflow"
+            act -W "$workflow" -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
           done
 
           # Properly format multiline output for GitHub Actions
