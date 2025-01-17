@@ -58,6 +58,4 @@ jobs:
         shell: bash
         working-directory: template
         run: |
-          act -W .github/workflows/latex.yml -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
-
-          # --input GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          act -W .github/workflows/latex.yml -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest --input GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
