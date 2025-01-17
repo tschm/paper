@@ -42,6 +42,7 @@ inputs:
     default: true
   GITHUB_TOKEN:
     description: 'Github token needed by tectonic?!'
+    type: string
     required: true
 
 runs:
