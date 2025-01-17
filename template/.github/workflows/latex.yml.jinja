@@ -14,11 +14,6 @@ jobs:
       - name: Checkout [{% raw %}${{ github.repository }}{% endraw %}]
         uses: actions/checkout@v4
 
-      - name: Report token
-        shell: bash
-        run: |
-          - echo "{% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}"
-
       - uses: ./actions/latex
         with:
           paper: paper/{{ project_name }}.tex
