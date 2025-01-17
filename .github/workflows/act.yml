@@ -1,0 +1,49 @@
+name: Test Template Workflows
+
+on:
+  push:
+
+jobs:
+  test-template-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
+
+      - name: Launch the cradle
+        uses: cvxgrp/cradle/actions/cradle@main
+        with:
+            python-version: '3.12'
+
+      - name: Run copier
+        working-directory: .
+        shell: bash
+        run: |
+          copier copy . template --data-file .github/data.yaml
+
+      - name: Prepare the repo
+        working-directory: template
+        shell: bash
+        run: |
+          # otherwise the pre-commit hooks won't "see" files
+          # also act needs to have the commit in place
+          git init -b main
+          git add .
+          git commit -m "Initial commit"
+
+      - name: Test pre-commit flow
+        uses: cvxgrp/cradle/actions/flow@main
+        with:
+          working-directory: template
+          workflow: pre-commit.yml
+
+      #- name: Run the latex flow
+      #  id: flow_latex
+      #  shell: bash
+      #  working-directory: template
+      #  run: |
+      #    echo "My personal TOKEN"
+      #    echo ${{ secrets.TOKEN }}
+      #    act -W .github/workflows/latex.yml -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest --input GITHUB_TOKEN=${{ secrets.TOKEN }}
