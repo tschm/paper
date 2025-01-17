@@ -35,5 +35,12 @@ jobs:
         run: |
           # Find all workflows but exclude act.yml and the current workflow file
           WORKFLOWS=$(find template/.github/workflows -name "*.yml" -o -name "*.yaml" | grep -v -E 'act\.yml')
-          echo "workflows=$WORKFLOWS" >> "$GITHUB_OUTPUT"
+
+          # Properly format multiline output for GitHub Actions
+          {
+            echo "workflows<<EOF"
+            echo "$WORKFLOWS"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
           echo $WORKFLOWS
