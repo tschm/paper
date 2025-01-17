@@ -25,6 +25,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      # Set Git user name and email for CI/CD
+      - name: Set Git user for CI/CD
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CI User"
+
       - name: Install and run copier
         working-directory: .
         run: |
