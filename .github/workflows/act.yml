@@ -38,6 +38,8 @@ jobs:
           # otherwise the pre-commit hooks won't "see" files
           git add .
           ls -all
+          git commit -m "Initial commit"
+
 
       - name: Find template workflows
         id: find-workflows
@@ -54,12 +56,6 @@ jobs:
             act -W "$workflow" -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
           done
 
-          # Properly format multiline output for GitHub Actions
-          #echo "workflows<<EOF" >> "$GITHUB_OUTPUT"
-          #echo "$WORKFLOWS" >> "$GITHUB_OUTPUT"
-          #echo "EOF" >> "$GITHUB_OUTPUT"
-
-          #echo "$WORKFLOWS" # Debugging output to show the workflows found
 
       #- name: Run template workflows
       #  run: |
