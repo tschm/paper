@@ -44,3 +44,12 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
           echo $WORKFLOWS
+
+      - name: Run template workflows
+        run: |
+          for workflow in ${{ steps.find-workflows.outputs.workflows }}; do
+            echo "Testing workflow: $workflow"
+            act -W "$workflow" -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
