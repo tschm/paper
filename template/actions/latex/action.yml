@@ -40,9 +40,9 @@ inputs:
     type: boolean
     required: false
     default: true
-  #GITHUB_TOKEN:
-  #  description: 'Github token needed by tectonic?!'
-  #  required: true
+  GITHUB_TOKEN:
+    description: 'Github token needed by tectonic?!'
+    required: true
 
 runs:
   using: "composite"
@@ -57,7 +57,7 @@ runs:
       run: |
         echo "TIMESTAMP=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
         echo "BUILD_DIR=build_${{ github.run_id }}" >> $GITHUB_ENV
-        echo "TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+        echo "TOKEN=${{ inputs.GITHUB_TOKEN }}" >> $GITHUB_ENV
 
     - name: Validate input files
       shell: bash
