@@ -12,10 +12,12 @@ jobs:
       - name: Install act
         run: |
           curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+          # Add the installation directory to PATH
+          echo ./bin" >> $GITHUB_PATH
 
       - name: Verify act installation
         run: |
-          ./bin/act --version
+          act --version
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
