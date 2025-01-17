@@ -15,7 +15,7 @@ jobs:
 
       - name: Verify act installation
         run: |
-          act --version
+          ./bin/act --version
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
