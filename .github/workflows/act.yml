@@ -22,7 +22,7 @@ jobs:
         shell: bash
         run: |
           copier copy . template --data-file .github/data.yaml
-          
+
       - name: Prepare the repo
         working-directory: template
         shell: bash
