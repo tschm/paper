@@ -62,6 +62,9 @@ jobs:
             act -W "$workflow" -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
           done
 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       #- name: Run template workflows
       #  run: |
