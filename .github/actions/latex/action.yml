@@ -1,0 +1,180 @@
+#  Copyright 2023 Stanford University Convex Optimization Group
+#
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+#
+#        http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+name: Compile and Deploy LaTeX Documents
+
+description: "Advanced LaTeX document compilation with error handling and artifacts"
+
+permissions:
+  contents: write
+  pages: write
+  #id-token: read
+
+
+inputs:
+  paper:
+    description: 'Space-separated list of LaTeX files to compile'
+    type: string
+    required: true
+  output-folder:
+    description: 'Output directory for compiled documents'
+    type: string
+    required: false
+    default: ''
+  draft:
+    description: 'Target branch for deployment'
+    type: string
+    required: false
+    default: 'draft'
+  enable-cache:
+    description: 'Enable Tectonic caching'
+    type: boolean
+    required: false
+    default: true
+  create-release:
+    description: 'Create a GitHub release with compiled PDFs'
+    type: boolean
+    required: false
+    default: true
+  #GITHUB_TOKEN:
+  #  required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Git repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history for versioning
+
+    - name: Setup environment variables
+      shell: bash
+      run: |
+        echo "TIMESTAMP=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
+        echo "BUILD_DIR=build_${{ github.run_id }}" >> $GITHUB_ENV
+
+    - name: Validate input files
+      shell: bash
+      run: |
+        for f in ${{ inputs.paper }}; do
+          if [ ! -f "$f" ]; then
+            echo "Error: File $f not found!"
+            exit 1
+          fi
+        done
+
+    - name: Setup Tectonic cache
+      if: inputs.enable-cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/Tectonic
+          **/_minted*
+        key: ${{ runner.os }}-tectonic-${{ hashFiles('**/*.tex', '**/*.bib') }}
+        restore-keys: |
+          ${{ runner.os }}-tectonic-
+
+    - name: Install Tectonic and dependencies
+      uses: wtfjoke/setup-tectonic@v3
+      with:
+        github-token: ${{ inputs.GITHUB_TOKEN }}
+        biber-version: '2.17'
+        # Add additional LaTeX packages if needed
+        #packages: |
+        #  fonts-extra
+        #  standalone
+        #  latexmk
+
+    - name: Create output directories
+      shell: bash
+      run: |
+        mkdir -p ${{ env.BUILD_DIR }}
+        mkdir -p publish${{ inputs.output-folder }}
+
+    - name: Compile LaTeX documents
+      shell: bash
+      env:
+        RUST_BACKTRACE: '1'
+      run: |
+        echo "Starting compilation at $(date)"
+
+        # Function to compile a single document
+        compile_doc() {
+          local doc="$1"
+          echo "Compiling $doc"
+
+          # First pass
+          if ! tectonic "$doc" --outdir ${{ env.BUILD_DIR }} --keep-logs; then
+            echo "Error compiling $doc - check logs"
+            return 1
+          fi
+
+          # Copy final PDF to publish directory
+          cp ${{ env.BUILD_DIR }}/*.pdf publish${{ inputs.output-folder }}/
+          echo "Successfully compiled $doc"
+        }
+
+        # Export the function for parallel use
+        export -f compile_doc
+
+        # Compile documents in parallel using GNU parallel if available
+        if command -v parallel >/dev/null 2>&1; then
+          echo ${{ inputs.paper }} | tr ' ' '\n' | parallel compile_doc
+        else
+          # Fall back to sequential compilation
+          for f in ${{ inputs.paper }}; do
+            compile_doc "$f" || exit 1
+          done
+        fi
+
+    - name: Generate compilation report
+      shell: bash
+      run: |
+        {
+          echo "# LaTeX Compilation Report"
+          echo "Generated: $(date)"
+          echo "## Compiled Documents"
+          for f in publish${{ inputs.output-folder }}/*.pdf; do
+            echo "- $(basename $f)"
+            echo "  - Size: $(ls -lh "$f" | awk '{print $5}')"
+            echo "  - SHA256: $(sha256sum "$f" | cut -d' ' -f1)"
+          done
+        } > publish${{ inputs.output-folder }}/compilation_report.md
+
+    - name: Create GitHub Release
+      if: inputs.create-release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: publish${{ inputs.output-folder }}/*.pdf
+        name: LaTeX Build ${{ env.TIMESTAMP }}
+        body_path: publish${{ inputs.output-folder }}/compilation_report.md
+        draft: true
+        #token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: ${{ inputs.draft }}
+        folder: publish${{ inputs.output-folder }}
+        commit-message: "Build: ${{ env.TIMESTAMP }} [skip ci]"
+        clean: true
+        single-commit: false
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: latex-build-${{ env.TIMESTAMP }}
+        path: |
+          publish${{ inputs.output-folder }}
+          ${{ env.BUILD_DIR }}/*.log
+        retention-days: 7
