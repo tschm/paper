@@ -13,6 +13,10 @@ jobs:
         run: |
           curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
 
+      - name: Verify act installation
+        run: |
+          act --version
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
