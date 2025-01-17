@@ -13,9 +13,26 @@ jobs:
         run: |
           curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
 
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install and run copier
+        working-directory: .
+        run: |
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir copier
+          mkdir -p template
+          copier copy . template --data-file .github/data.yaml
+          cd template
+          git init -b main
+          # otherwise the pre-commit hooks won't "see" files
+          git add .
+
       - name: Find template workflows
         id: find-workflows
         run: |
           # Find all workflows but exclude act.yml and the current workflow file
-          WORKFLOWS=$(find .github/workflows -name "*.yml" -o -name "*.yaml" | grep -v -E 'act\.yml|test-template-workflows\.yml')
+          WORKFLOWS=$(find .github/workflows -name "*.yml" -o -name "*.yaml" | grep -v -E 'act\.yml')
           echo "workflows=$WORKFLOWS" >> "$GITHUB_OUTPUT"
