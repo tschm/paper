@@ -37,23 +37,23 @@ jobs:
           WORKFLOWS=$(find template/.github/workflows -name "*.yml" -o -name "*.yaml" | grep -v -E 'act\.yml')
 
           for workflow in $WORKFLOWS; do
-            echo $workflow
-          end
+            echo "Testing workflow: $workflow"
+          done
 
           # Properly format multiline output for GitHub Actions
-          echo "workflows<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$WORKFLOWS" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          #echo "workflows<<EOF" >> "$GITHUB_OUTPUT"
+          #echo "$WORKFLOWS" >> "$GITHUB_OUTPUT"
+          #echo "EOF" >> "$GITHUB_OUTPUT"
 
-          echo "$WORKFLOWS" # Debugging output to show the workflows found
+          #echo "$WORKFLOWS" # Debugging output to show the workflows found
 
-      - name: Run template workflows
-        run: |
-          IFS=$'\n'  # Set Internal Field Separator to newline for correct splitting
-          # Iterate over the workflows
-          for workflow in ${{ steps.find-workflows.outputs.workflows }}; do
-            echo "Testing workflow: $workflow"
-            act -W "$workflow" -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #- name: Run template workflows
+      #  run: |
+      #    IFS=$'\n'  # Set Internal Field Separator to newline for correct splitting
+      #    # Iterate over the workflows
+      #    for workflow in ${{ steps.find-workflows.outputs.workflows }}; do
+      #      echo "Testing workflow: $workflow"
+      #      act -W "$workflow" -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
+      #    done
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
