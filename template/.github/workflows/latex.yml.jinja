@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: .github/actions/latex
+      - uses: ./actions/latex
         with:
 
           paper: paper/{{ project_name }}.tex
