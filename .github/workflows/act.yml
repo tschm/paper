@@ -36,6 +36,10 @@ jobs:
           # Find all workflows but exclude act.yml and the current workflow file
           WORKFLOWS=$(find template/.github/workflows -name "*.yml" -o -name "*.yaml" | grep -v -E 'act\.yml')
 
+          for workflow in $WORKFLOWS; do
+            echo $workflow
+          end
+
           # Properly format multiline output for GitHub Actions
           echo "workflows<<EOF" >> "$GITHUB_OUTPUT"
           echo "$WORKFLOWS" >> "$GITHUB_OUTPUT"
@@ -45,6 +49,7 @@ jobs:
 
       - name: Run template workflows
         run: |
+          IFS=$'\n'  # Set Internal Field Separator to newline for correct splitting
           # Iterate over the workflows
           for workflow in ${{ steps.find-workflows.outputs.workflows }}; do
             echo "Testing workflow: $workflow"
