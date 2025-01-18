@@ -58,7 +58,6 @@ runs:
       run: |
         echo "TIMESTAMP=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
         echo "BUILD_DIR=build_${{ github.run_id }}" >> $GITHUB_ENV
-        echo "TOKEN=${{ inputs.GITHUB_TOKEN }}" >> $GITHUB_ENV
 
     - name: Validate input files
       shell: bash
@@ -81,16 +80,18 @@ runs:
         restore-keys: |
           ${{ runner.os }}-tectonic-
 
-    - name: Verify input
+    - name: Install Tectonic and biber
       shell: bash
-      run : |
-        echo ${{ env.TOKEN }}
+      run: |
+        # install tectonic in the directory you run from
+        curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh
+        # install biber
 
-    - name: Install Tectonic and dependencies
-      uses: wtfjoke/setup-tectonic@v3
-      with:
-        github-token: ${{ env.TOKEN }}
-        biber-version: '2.17'
+    #- name: Install Tectonic and dependencies
+    #  uses: wtfjoke/setup-tectonic@v3
+    #  with:
+    #    github-token: ${{ env.TOKEN }}
+    #    biber-version: '2.17'
         # Add additional LaTeX packages if needed
         #packages: |
         #  fonts-extra
@@ -139,31 +140,8 @@ runs:
           done
         fi
 
-    - name: Generate compilation report
-      shell: bash
-      run: |
-        {
-          echo "# LaTeX Compilation Report"
-          echo "Generated: $(date)"
-          echo "## Compiled Documents"
-          for f in publish${{ inputs.output-folder }}/*.pdf; do
-            echo "- $(basename $f)"
-            echo "  - Size: $(ls -lh "$f" | awk '{print $5}')"
-            echo "  - SHA256: $(sha256sum "$f" | cut -d' ' -f1)"
-          done
-        } > publish${{ inputs.output-folder }}/compilation_report.md
-
-    - name: Create GitHub Release
-      if: inputs.create-release
-      uses: softprops/action-gh-release@v2
-      with:
-        files: publish${{ inputs.output-folder }}/*.pdf
-        name: LaTeX Build ${{ env.TIMESTAMP }}
-        body_path: publish${{ inputs.output-folder }}/compilation_report.md
-        draft: true
-        #token: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Deploy to GitHub Pages
+      if: ${{ env.ACT != 'true' }}  # Skip if running with 'act'
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: ${{ inputs.draft }}
@@ -173,6 +151,7 @@ runs:
         single-commit: false
 
     - name: Upload build artifacts
+      if: ${{ env.ACT != 'true' }}  # Skip if running with 'act'
       uses: actions/upload-artifact@v4
       with:
         name: latex-build-${{ env.TIMESTAMP }}

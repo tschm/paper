@@ -14,13 +14,10 @@ jobs:
       - name: Checkout [{% raw %}${{ github.repository }}{% endraw %}]
         uses: actions/checkout@v4
 
-
       - uses: ./actions/latex
         with:
           paper: paper/{{ project_name }}.tex
-          GITHUB_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+          #GITHUB_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
           draft: draft
-          create-release: true
-          createXXX: true
 
       # add or remove papers here

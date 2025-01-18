@@ -7,8 +7,6 @@ jobs:
   test-template-workflows:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
       - name: Checkout [${{ github.repository }}]
         uses: actions/checkout@v4
 
@@ -38,6 +36,12 @@ jobs:
         with:
           working-directory: template
           workflow: pre-commit.yml
+
+      - name: Test latex flow
+        uses: cvxgrp/cradle/actions/flow@main
+        with:
+          working-directory: template
+          workflow: latex.yml
 
       #- name: Run the latex flow
       #  id: flow_latex
