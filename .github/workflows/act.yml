@@ -42,12 +42,3 @@ jobs:
         with:
           working-directory: template
           workflow: latex.yml
-
-      #- name: Run the latex flow
-      #  id: flow_latex
-      #  shell: bash
-      #  working-directory: template
-      #  run: |
-      #    echo "My personal TOKEN"
-      #    echo ${{ secrets.TOKEN }}
-      #    act -W .github/workflows/latex.yml -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest --input GITHUB_TOKEN=${{ secrets.TOKEN }}
