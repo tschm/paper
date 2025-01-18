@@ -89,9 +89,9 @@ runs:
         sudo apt-get update -y
         sudo apt-get install -y biber
 
-        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        #echo "$HOME" >> $GITHUB_PATH
 
-        tectonic --version
+        ./tectonic --version
         biber --version
 
     # Biber from apt-get install will already be in PATH
@@ -125,7 +125,7 @@ runs:
           echo "Compiling $doc"
 
           # First pass
-          if ! tectonic "$doc" --outdir ${{ env.BUILD_DIR }} --keep-logs; then
+          if ! ./tectonic "$doc" --outdir ${{ env.BUILD_DIR }} --keep-logs; then
             echo "Error compiling $doc - check logs"
             return 1
           fi
