@@ -40,10 +40,10 @@ inputs:
     type: boolean
     required: false
     default: true
-  GITHUB_TOKEN:
-    description: 'Github token needed by tectonic?!'
-    type: string
-    required: true
+  #GITHUB_TOKEN:
+  #  description: 'Github token needed by tectonic?!'
+  #  type: string
+  #  required: true
 
 runs:
   using: "composite"
