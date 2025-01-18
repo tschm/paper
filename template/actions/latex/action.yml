@@ -86,7 +86,15 @@ runs:
         # install tectonic in the directory you run from
         curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh
         # install biber
+        sudo apt-get update
+        sudo apt-get install biber
 
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+        tectonic --version
+        biber --version
+
+    # Biber from apt-get install will already be in PATH
     #- name: Install Tectonic and dependencies
     #  uses: wtfjoke/setup-tectonic@v3
     #  with:
