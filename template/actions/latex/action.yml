@@ -35,15 +35,6 @@ inputs:
     type: boolean
     required: false
     default: true
-  #create-release:
-  #  description: 'Create a GitHub release with compiled PDFs'
-  #  type: boolean
-  #  required: false
-  #  default: true
-  #GITHUB_TOKEN:
-  #  description: 'Github token needed by tectonic?!'
-  #  type: string
-  #  required: true
 
 runs:
   using: "composite"
@@ -93,18 +84,6 @@ runs:
 
         ./tectonic --version
         biber --version
-
-    # Biber from apt-get install will already be in PATH
-    #- name: Install Tectonic and dependencies
-    #  uses: wtfjoke/setup-tectonic@v3
-    #  with:
-    #    github-token: ${{ env.TOKEN }}
-    #    biber-version: '2.17'
-        # Add additional LaTeX packages if needed
-        #packages: |
-        #  fonts-extra
-        #  standalone
-        #  latexmk
 
     - name: Create output directories
       shell: bash
@@ -157,24 +136,3 @@ runs:
         commit-message: "Build: ${{ env.TIMESTAMP }} [skip ci]"
         clean: true
         single-commit: false
-
-#    - name: Create GitHub Release
-#      if: ${{ env.ACT != 'true' }}  # Skip if running with 'act'
-#      #if: inputs.create-release
-#      uses: softprops/action-gh-release@v1
-#      with:
-#        files: publish${{ inputs.output-folder }}/*.pdf
-#        name: LaTeX Build ${{ env.TIMESTAMP }}
-#        body_path: publish${{ inputs.output-folder }}/compilation_report.md
-#        draft: true
-#        #token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload build artifacts
-      if: ${{ env.ACT != 'true' }}  # Skip if running with 'act'
-      uses: actions/upload-artifact@v4
-      with:
-        name: latex-build-${{ env.TIMESTAMP }}
-        path: |
-          publish${{ inputs.output-folder }}
-          ${{ env.BUILD_DIR }}/*.log
-        retention-days: 7
