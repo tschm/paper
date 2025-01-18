@@ -86,8 +86,8 @@ runs:
         # install tectonic in the directory you run from
         curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh
         # install biber
-        sudo apt-get update
-        sudo apt-get install biber
+        sudo apt-get update -y
+        sudo apt-get install -y biber
 
         echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
