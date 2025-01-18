@@ -35,11 +35,11 @@ inputs:
     type: boolean
     required: false
     default: true
-  create-release:
-    description: 'Create a GitHub release with compiled PDFs'
-    type: boolean
-    required: false
-    default: true
+  #create-release:
+  #  description: 'Create a GitHub release with compiled PDFs'
+  #  type: boolean
+  #  required: false
+  #  default: true
   #GITHUB_TOKEN:
   #  description: 'Github token needed by tectonic?!'
   #  type: string
@@ -157,6 +157,17 @@ runs:
         commit-message: "Build: ${{ env.TIMESTAMP }} [skip ci]"
         clean: true
         single-commit: false
+
+#    - name: Create GitHub Release
+#      if: ${{ env.ACT != 'true' }}  # Skip if running with 'act'
+#      #if: inputs.create-release
+#      uses: softprops/action-gh-release@v1
+#      with:
+#        files: publish${{ inputs.output-folder }}/*.pdf
+#        name: LaTeX Build ${{ env.TIMESTAMP }}
+#        body_path: publish${{ inputs.output-folder }}/compilation_report.md
+#        draft: true
+#        #token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload build artifacts
       if: ${{ env.ACT != 'true' }}  # Skip if running with 'act'
