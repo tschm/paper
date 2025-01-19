@@ -59,7 +59,7 @@ runs:
             exit 1
           fi
         done
-
+      
     - name: Setup Tectonic cache
       if: inputs.enable-cache
       uses: actions/cache@v4
@@ -70,20 +70,24 @@ runs:
         key: ${{ runner.os }}-tectonic-${{ hashFiles('**/*.tex', '**/*.bib') }}
         restore-keys: |
           ${{ runner.os }}-tectonic-
-
+    
     - name: Install Tectonic and biber
-      shell: bash
-      run: |
-        # install tectonic in the directory you run from
-        curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh
-        # install biber
-        sudo apt-get update -y
-        sudo apt-get install -y biber
-
-        #echo "$HOME" >> $GITHUB_PATH
-
-        ./tectonic --version
-        biber --version
+      uses: wtfjoke/setup-tectonic@v3
+      with:
+        biber-version: '2.17'
+        
+      #shell: bash
+      #run: |
+      #  # install tectonic in the directory you run from
+      #  curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh
+      #  # install biber
+      #  sudo apt-get update -y
+      #  sudo apt-get install -y biber
+      #
+      #  #echo "$HOME" >> $GITHUB_PATH
+      #
+      #  ./tectonic --version
+      #  biber --version
 
     - name: Create output directories
       shell: bash
