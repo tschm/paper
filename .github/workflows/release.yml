@@ -7,7 +7,7 @@ on:
       - completed
     branches:
       - main  # Only trigger if the CI workflow ran on the main branch
-      
+
 permissions:
   contents: write
 
