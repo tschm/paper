@@ -14,11 +14,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    # -----------------------------------------------------------------------------
-    # Step 1: Checkout the repository
-    # -----------------------------------------------------------------------------
-    - name: Checkout [${{ github.repository }}]
-      uses: actions/checkout@v4
+
 
     # -----------------------------------------------------------------------------
     # Step 2: Bump version and tag
