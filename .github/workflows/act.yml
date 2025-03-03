@@ -11,16 +11,13 @@ jobs:
         uses: tschm/cradle/actions/cradle@main
         with:
             python-version: '3.12'
-            destination-path: 'template'
 
       - name: Test pre-commit flow
         uses: tschm/cradle/actions/flow@main
         with:
-          working-directory: template
           workflow: pre-commit.yml
 
       - name: Test latex flow
         uses: tschm/cradle/actions/flow@main
         with:
-          working-directory: template
           workflow: latex.yml
