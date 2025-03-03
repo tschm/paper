@@ -14,7 +14,7 @@ jobs:
       - name: Checkout [{% raw %}${{ github.repository }}{% endraw %}]
         uses: actions/checkout@v4
 
-      - uses: ./actions/latex
+      - uses: ./.github/actions/latex
         with:
           paper: paper/{{ project_name }}.tex
           draft: draft
