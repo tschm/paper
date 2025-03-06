@@ -1,7 +1,9 @@
 # additional questions
 ---
-# for adding your own questions
-# https://copier.readthedocs.io/en/stable/configuring/#prompt-templating
+use_renovate:
+    type: bool
+    default: false
+    help: Do you want to use Renovate?
 ---
 
 # Require that the user has at least Copier v9.1.0 installed
