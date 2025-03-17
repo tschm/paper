@@ -14,7 +14,7 @@ help:  ## Display this help screen
 # list the papers here
 .PHONY: compile
 compile: ## Compile document(s)
-	@./tectonic paper/{{ project_name }}.tex
+	@./tectonic paper/document.tex
 
 
 .PHONY: clean
