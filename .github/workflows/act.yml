@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Launch the cradle
-        uses: tschm/cradle/actions/cradle@v0.1.54
+        uses: tschm/cradle/actions/cradle@v0.1.55
         with:
             python-version: '3.12'
 
