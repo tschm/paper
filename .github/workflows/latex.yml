@@ -12,7 +12,7 @@ jobs:
         with:
             python-version: '3.12'
 
-      - name: Test pre-commit flow
+      - name: Test latex flow
         uses: tschm/cradle/actions/flow@v0.1.52
         with:
-          workflow: pre-commit.yml
+          workflow: latex.yml
