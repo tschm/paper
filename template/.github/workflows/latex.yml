@@ -1,0 +1,17 @@
+name: LATEX
+
+on:
+  push
+
+# write to the draft branch
+permissions:
+  contents: write
+
+jobs:
+  latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Build and publish the LaTeX document"
+        uses: tschm/cradle/actions/latex@main
+        with:
+          paper: paper/document.tex
