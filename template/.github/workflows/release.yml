@@ -33,6 +33,6 @@ jobs:
       - name: "Build and publish the LaTeX document"
         uses: tschm/cradle/actions/latex@main
         with:
-          paper: paper/futures.tex
+          paper: paper/document.tex
           create-release: true
           tag: ${{ needs.tagging.outputs.new_tag }}
