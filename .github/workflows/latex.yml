@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  test-template-workflows:
+  compile-template:
     runs-on: ubuntu-latest
     steps:
       - name: Launch the cradle
