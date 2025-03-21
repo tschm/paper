@@ -13,9 +13,6 @@ jobs:
       new_tag: ${{ steps.tag_step.outputs.new_tag }}
 
     steps:
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
-
       - name: Generate Tag
         id: tag_step
         uses: tschm/cradle/actions/tag@v0.1.56
