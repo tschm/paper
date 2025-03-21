@@ -18,6 +18,6 @@ jobs:
 
       - name: Generate Tag
         id: tag_step
-        uses: tschm/cradle/actions/tag@v0.1.55
+        uses: tschm/cradle/actions/tag@v0.1.56
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
