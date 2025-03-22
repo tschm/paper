@@ -1,22 +1,28 @@
 \documentclass{article}  % Add this line to specify the document class
 \usepackage{natbib}      % For citation management
 \usepackage{listings}
+\usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{amsmath}
 
+% Define custom colors for better contrast
+\definecolor{myblue}{rgb}{0.1, 0.2, 0.7}  % Darker blue
+\definecolor{mygreen}{rgb}{0.0, 0.5, 0.2}  % Darker green
+\definecolor{myred}{rgb}{0.7, 0.1, 0.1}  % Darker red
+\definecolor{paleyellow}{rgb}{1.0, 1.0, 0.9}  % Very pale yellow for background
+
 \lstset{
   language=Python,
-  basicstyle=\ttfamily,
-  keywordstyle=\color{blue},
-  stringstyle=\color{red},
-  commentstyle=\color{green},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{myblue},       % Darker blue for keywords
+  commentstyle=\color{mygreen},      % Darker green for comments
+  stringstyle=\color{myred},         % Darker red for strings
   numbers=left,
-  stepnumber=1,
-  numberstyle=\tiny\color{gray},
+  numberstyle=\tiny\color{gray},     % Use gray for line numbers
   frame=single,
-  backgroundcolor=\color{white},
+  backgroundcolor=\color{paleyellow}, % Set very pale yellow background
   breaklines=true,
-  showstringspaces=false,
+  showstringspaces=false
 }
 
 \title{A Brief Overview of the Simple Harmonic Oscillator}
