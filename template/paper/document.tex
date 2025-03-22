@@ -1,5 +1,23 @@
 \documentclass{article}  % Add this line to specify the document class
 \usepackage{natbib}      % For citation management
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily,
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  commentstyle=\color{green},
+  numbers=left,
+  stepnumber=1,
+  numberstyle=\tiny\color{gray},
+  frame=single,
+  backgroundcolor=\color{white},
+  breaklines=true,
+  showstringspaces=false,
+}
 
 \title{A Brief Overview of the Simple Harmonic Oscillator}
 \author{Peter Maffay}
@@ -36,6 +54,15 @@ to this equation is:
 
 where $A$ is the amplitude and $\phi$ is the phase constant
 \citep{goldstein2002}.
+
+\begin{lstlisting}
+# Python code to calculate sum of squares of first 10 numbers
+def sum_of_squares(n):
+    return sum(i**2 for i in range(1, n+1))
+
+result = sum_of_squares(10)
+print(f"The sum of squares of first 10 numbers is: {result}")
+\end{lstlisting}
 
 \bibliography{references}
 \bibliographystyle{plainnat}
