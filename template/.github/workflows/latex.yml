@@ -12,6 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Build and publish the LaTeX document"
-        uses: tschm/cradle/actions/latex@v0.1.64
+        uses: tschm/cradle/actions/latex@v0.1.66
         with:
           paper: paper/document.tex
