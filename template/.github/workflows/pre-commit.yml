@@ -1,13 +1,18 @@
+# Workflow to run pre-commit checks on the codebase
+# This workflow runs automatically on every push to the repository
+
 name: pre-commit
 
 on:
-  push:
+  push:  # Trigger on push events
 
+# Only read access is needed for pre-commit checks
 permissions:
-  contents: read
+  contents: read  # Read-only access to repository contents
 
 jobs:
+  # Job to run pre-commit checks on the repository
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: tschm/cradle/actions/pre-commit@v0.1.68
+      - uses: tschm/cradle/actions/pre-commit@v0.1.68  # Custom action to run pre-commit checks
