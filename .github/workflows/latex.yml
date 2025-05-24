@@ -1,18 +1,22 @@
+# Workflow to test LaTeX document compilation
+# This workflow runs automatically on every push to the repository
+
 name: LaTeX
 
 on:
-  push:
+  push:  # Trigger on push events
 
 jobs:
+  # Job to test the LaTeX compilation workflow
   compile-template:
     runs-on: ubuntu-latest
     steps:
       - name: Launch the cradle
-        uses: tschm/cradle/actions/cradle@v0.1.68
+        uses: tschm/cradle/actions/cradle@v0.1.68  # Custom action to set up the environment
         with:
-            python-version: '3.12'
+            python-version: '3.12'  # Specify Python version to use
 
       - name: Test latex flow
-        uses: tschm/cradle/actions/flow@v0.1.68
+        uses: tschm/cradle/actions/flow@v0.1.68  # Custom action to run workflow tests
         with:
-          workflow: latex.yml
+          workflow: latex.yml  # Test the LaTeX workflow
