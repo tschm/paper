@@ -1,35 +1,51 @@
+# Makefile for the paper project template
+# This Makefile provides commands for setting up the development environment,
+# compiling LaTeX documents, and maintaining code quality.
+
+# Set the default target to 'help' when running make without arguments
 .DEFAULT_GOAL := help
 
+# Create a Python virtual environment using uv (faster alternative to venv)
 venv:
-	@curl -LsSf https://astral.sh/uv/install.sh | sh
-	@uv venv --python '3.12'
+	@curl -LsSf https://astral.sh/uv/install.sh | sh  # Install uv if not already installed
+	@uv venv --python '3.12'  # Create a virtual environment with Python 3.12
 
 
+# Mark 'help' as a phony target (not associated with a file)
 .PHONY: help
 help:  ## Display this help screen
-	@echo -e "\033[1mAvailable commands:\033[0m"
+	@echo -e "\033[1mAvailable commands:\033[0m"  # Print header in bold
+	# Find all targets with comments (##) and display them as a help menu
+	# This grep/awk command extracts target names and their descriptions from the Makefile
 	@grep -E '^[a-z.A-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}' | sort
 
 
-# list the papers here
+# Mark 'compile' as a phony target
 .PHONY: compile
 compile: ## Compile document(s)
-	@./tectonic paper/document.tex
+	@./tectonic paper/document.tex  # Compile the LaTeX document using tectonic
 
 
+# Mark 'clean' as a phony target
 .PHONY: clean
 clean: ## clean the folder
+	# Remove all files and directories that are ignored by git
+	# -d: include directories, -X: only remove files ignored by git, -f: force
 	@git clean -d -X -f
 
 
+# Mark 'install' as a phony target
 .PHONY: install
 install: ## install tectonic
+	# Download and install tectonic LaTeX compiler using the official installation script
 	@curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh
+	# Display the current PATH to verify tectonic is accessible
 	@echo $PATH
 
 
+# Mark 'fmt' as a phony target
 .PHONY: fmt
 fmt: venv ## Run autoformatting and linting
-	@uv pip install pre-commit
-	@uv run pre-commit install
-	@uv run pre-commit run --all-files
+	@uv pip install pre-commit  # Install pre-commit in the virtual environment
+	@uv run pre-commit install  # Install pre-commit hooks in the git repository
+	@uv run pre-commit run --all-files  # Run all pre-commit hooks on all files
