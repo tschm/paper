@@ -17,6 +17,6 @@ jobs:
             python-version: '3.12'  # Specify Python version to use
 
       - name: Test pre-commit flow
-        uses: tschm/cradle/actions/flow@v0.1.72  # Custom action to run workflow tests
+        uses: tschm/cradle/actions/flow@v0.1.75  # Custom action to run workflow tests
         with:
           workflow: pre-commit.yml  # Test the pre-commit workflow
