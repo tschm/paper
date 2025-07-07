@@ -1,30 +1,50 @@
-# Workflow to automatically bump the version, create a new tag, and publish LaTeX documents
+# Workflow to build and release project artifacts
 # This workflow is manually triggered via the GitHub UI
 
-name: Bump version and publish
+name: Build and Release
 
 on:
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:  # Manual trigger only
+    inputs:
+      tag:
+        description: 'Release tag (e.g. v1.2.3)'
+        required: true
+        type: string
 
 # Permissions needed for the workflow
 permissions:
-  contents: write  # Allows the workflow to write to the repository (create tags and publish documents)
+  contents: write  # Allows the workflow to write to the repository (create tags)
+  packages: write  # Allows the workflow to write to GitHub Packages (for Docker images)
 
 jobs:
-  # Job to generate a new version tag
+  # Job to set the tag based on input
   tagging:
     runs-on: ubuntu-latest
     outputs:
-      new_tag: ${{ steps.tag_step.outputs.new_tag }}  # Output the new tag to be used by other jobs
+      new_tag: {% raw %}${{ steps.set_tag.outputs.tag }}{% endraw %}  # Output the tag to be used by other jobs
 
     steps:
-      - name: Generate Tag
-        id: tag_step
-        uses: tschm/cradle/actions/tag@v0.2.0  # Custom action to generate a new tag
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for authentication
+      - name: Checkout [{% raw %}${{ github.repository }}{% endraw %}]
+        uses: actions/checkout@v4  # Check out the repository code
 
-  # Job to build and publish the LaTeX document with the new tag
+      - name: Create and Push Tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a "{% raw %}${{ github.event.inputs.tag }}{% endraw %}" -m "Release {% raw %}${{ github.event.inputs.tag }}{% endraw %}"
+          git push origin "{% raw %}${{ github.event.inputs.tag }}{% endraw %}"
+
+      # Create a GitHub release for the tag
+      # This creates a release on GitHub with automatically generated release notes
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2.3.2  # Third-party release action
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
+          tag_name: ${{ github.event.inputs.tag }}  # Use the provided tag
+          generate_release_notes: true  # Automatically generate notes from commits
+
+
+  # Job to build and publish LaTeX document (only included if use_latex is true)
   latex:
     runs-on: ubuntu-latest
     needs: tagging  # This job depends on the tagging job
@@ -34,7 +54,7 @@ jobs:
           echo "Tag: ${{ needs.tagging.outputs.new_tag }}"  # Print the new tag
 
       - name: "Build and publish the LaTeX document"
-        uses: tschm/cradle/actions/latex@main  # Custom action to build LaTeX documents
+        uses: tschm/cradle/actions/latex@v0.2.0  # Custom action to build LaTeX documents
         with:
           paper: paper/document.tex  # Path to the LaTeX document to build
           tag: ${{ needs.tagging.outputs.new_tag }}  # Tag from the tagging job
