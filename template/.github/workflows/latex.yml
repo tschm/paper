@@ -1,21 +1,58 @@
-# Workflow to build and publish LaTeX documents
-# This workflow runs automatically on every push to the repository
-
-name: LATEX
+name: Build LaTeX PDF
 
 on:
-  push  # Trigger on push events
+  push:
 
-# Permissions needed for the workflow
 permissions:
-  contents: write  # Allows the workflow to write to the repository (for draft branch)
+  contents: write
 
 jobs:
-  # Job to build and publish the LaTeX document
-  latex:
+  build:
     runs-on: ubuntu-latest
+    name: Compile LaTeX with Tectonic
+
     steps:
-      - name: "Build and publish the LaTeX document"
-        uses: tschm/cradle/actions/latex@v0.3.04  # Custom action to build LaTeX documents
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          paper: paper/document.tex  # Path to the LaTeX document to build
+          fetch-depth: '0'
+
+      - name: Create header.tex
+        working-directory: paper
+        run: |
+          rm -f header.tex
+
+          # Extract values from GitHub-provided environment variables
+          REPO="${{ github.repository }}"
+          REPO_NAME=$(basename "${REPO}")
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          SHA="${GITHUB_SHA:0:7}"
+
+          # Escape LaTeX-sensitive characters (mainly underscores)
+          escape_latex() {
+            echo "$1" | sed -e 's/_/\\_/g'
+          }
+
+          REPO_ESC=$(escape_latex "$REPO_NAME")
+          BRANCH_ESC=$(escape_latex "$BRANCH")
+          SHA_ESC=$(escape_latex "$SHA")
+
+          # Construct commit URL
+          COMMIT_URL="https://github.com/$REPO/commit/${GITHUB_SHA}"
+
+          # Output single LaTeX hyperlink line
+          echo "\\href{$COMMIT_URL}{\\texttt{Repo: $REPO_ESC, Branch: $BRANCH_ESC, Version: $SHA_ESC}}" > header.tex
+
+          cat header.tex
+
+      - name: Compile LateX
+        uses: tschm/cradle/actions/latex@main
+        with:
+          tex-file: document.tex
+          tex-folder: paper
+
+      - name: Upload compiled PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-pdf
+          path: paper/compiled/*.pdf
