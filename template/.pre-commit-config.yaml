@@ -6,11 +6,11 @@ repos:
       - id: trailing-whitespace
       - id: check-yaml
 
-
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.45.0
     hooks:
       - id: markdownlint
+        args: ["--config", ".markdownlint.json"]
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.33.2
