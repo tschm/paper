@@ -6,9 +6,8 @@
 .DEFAULT_GOAL := help
 
 # Create a Python virtual environment using uv (faster alternative to venv)
-venv:
+uv:
 	@curl -LsSf https://astral.sh/uv/install.sh | sh  # Install uv if not already installed
-	@uv venv --python '3.12'  # Create a virtual environment with Python 3.12
 
 
 # Mark 'help' as a phony target (not associated with a file)
@@ -22,8 +21,8 @@ help:  ## Display this help screen
 
 # Mark 'compile' as a phony target
 .PHONY: compile
-compile: ## Compile document(s)
-	@./tectonic paper/document.tex  # Compile the LaTeX document using tectonic
+compile: install ## Compile document(s)
+	./tectonic paper/document.tex
 
 
 # Mark 'clean' as a phony target
@@ -45,5 +44,5 @@ install: ## install tectonic
 
 # Mark 'fmt' as a phony target
 .PHONY: fmt
-fmt: venv ## Run autoformatting and linting
+fmt: uv ## Run autoformatting and linting
 	@uvx pre-commit run --all-files  # Run all pre-commit hooks on all files
