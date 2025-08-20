@@ -1,6 +1,6 @@
-# Makefile for the paper template repository
+# Makefile for the paper project template
 # This Makefile provides commands for setting up the development environment,
-# running formatting tools, and cleaning the repository.
+# compiling LaTeX documents, and maintaining code quality.
 
 # Set the default target to 'help' when running make without arguments
 .DEFAULT_GOAL := help
@@ -19,12 +19,27 @@ help:  ## Display this help screen
 	@grep -E '^[a-z.A-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}' | sort
 
 
+# Mark 'compile' as a phony target
+.PHONY: compile
+compile: install ## Compile document(s)
+	./tectonic paper/document.tex
+
+
 # Mark 'clean' as a phony target
 .PHONY: clean
 clean: ## clean the folder
 	# Remove all files and directories that are ignored by git
 	# -d: include directories, -X: only remove files ignored by git, -f: force
 	@git clean -d -X -f
+
+
+# Mark 'install' as a phony target
+.PHONY: install
+install: ## install tectonic
+	# Download and install tectonic LaTeX compiler using the official installation script
+	@curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh
+	# Display the current PATH to verify tectonic is accessible
+	@echo $PATH
 
 
 # Mark 'fmt' as a phony target
