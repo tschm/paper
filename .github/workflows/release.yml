@@ -8,10 +8,6 @@ on:
         required: true
         type: string
 
-  push:
-    tags:
-      - 'v*'  # Trigger only on tags like v1.2.3
-
 permissions:
   contents: write
   pages: write
@@ -23,7 +19,6 @@ concurrency:
 
 jobs:
   tagging:
-    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     steps:
@@ -37,62 +32,69 @@ jobs:
           git tag -a "${{ github.event.inputs.tag }}" -m "Release ${{ github.event.inputs.tag }}"
           git push origin "${{ github.event.inputs.tag }}"
 
-  latex:
-    runs-on: ubuntu-latest
+  build-latex:
+    uses: ./.github/workflows/latex.yml
     needs: [tagging]
+
+  release-and-deploy:
+    runs-on: ubuntu-latest
+    needs: [build-latex]
 
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Checkout [${{ github.repository }}]
+      - name: Checkout repository
         uses: actions/checkout@v5
+
+      - name: Download compiled PDF
+        uses: actions/download-artifact@v5
         with:
-          fetch-depth: 0
-          fetch-tags: true
+          path: compiled
 
-      - name: Determine tag name
-        id: tag
+      - name: Check files
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "TAG=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
-          else
-            echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          fi
+          ls -all
+          tree
 
-      - name: Create header.tex
-        working-directory: paper
+      - name: Generate index.html
         run: |
-          rm -f header.tex
+          # Extract repository name from github.repository (owner/repo)
+          REPO_NAME=$(echo "${{ github.repository }}" | cut -d '/' -f 2)
 
-          REPO="${{ github.repository }}"
-          TAG="$TAG"
-          REPO_NAME=$(basename "$REPO")
+          # Copy the template file to the compiled directory
+          mkdir -p compiled
+          cp templates/index.html compiled/index.html
 
-          escape_latex() {
-            echo "$1" | sed 's/_/\\_/g'
-          }
+          # Replace placeholders in the template
+          sed -i "s|{{ repo_name }}|${REPO_NAME}|g" compiled/index.html
+          sed -i "s|{{ tag }}|${{ github.event.inputs.tag }}|g" compiled/index.html
+          sed -i "s|{{ github_repo }}|${{ github.repository }}|g" compiled/index.html
 
-          REPO_ESC=$(escape_latex "$REPO_NAME")
-          COMMIT_URL="https://github.com/$REPO/tree/$TAG"
+          # Insert PDF links into the template
+          # Create a string variable for PDF links
+          find compiled -type f -name "*.pdf" | sort | while read -r file; do
+            rel_path=${file#compiled/}
+            filename=$(basename "$file")
+            printf "      <li class='hover:bg-gray-100 p-2 rounded transition-colors'><a href='%s' class='text-blue-600 hover:underline'>%s</a></li>\n" "$rel_path" "$filename"
+          done > pdf_links.txt
 
-          echo "\\href{$COMMIT_URL}{\\texttt{REPO: $REPO_ESC, TAG: $TAG}}" > header.tex
-          cat header.tex
+          sed -i "/{{ PDF_LINKS }}/{
+              r pdf_links.txt
+              d
+          }" compiled/index.html
 
-      - name: Compile LaTeX
-        uses: tschm/cradle/actions/latex@v0.3.06
-        with:
-          tex-file: document.tex
-          tex-folder: paper
+          # Display the generated file
+          cat compiled/index.html
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2.3.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ env.TAG }}
+          tag_name: ${{ github.event.inputs.tag }}
           generate_release_notes: true
-          files: paper/compiled/*.pdf
+          files: compiled/**/*.pdf
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -100,7 +102,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: paper/compiled
+          path: compiled
 
       - name: Deploy to GitHub Pages
         id: deployment
