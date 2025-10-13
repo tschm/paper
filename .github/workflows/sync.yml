@@ -18,6 +18,7 @@ on:
 
 jobs:
   sync:
+    if: ${{ github.repository != 'tschm/latex' }}
     runs-on: ubuntu-latest
     steps:
       - name: Sync Template
