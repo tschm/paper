@@ -1,12 +1,12 @@
 template-repository: "tschm/latex"
 template-branch: "main"
 include: |
-  .github
+  .editorconfig
   templates
   .gitignore
   .markdownlint.json
-  .editorconfig
   .pre-commit-config.yaml
   Makefile
+  .github
 exclude: |
   .github/workflows/latex.yml
