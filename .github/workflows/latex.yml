@@ -2,57 +2,14 @@ name: Build LaTeX PDF
 
 on:
   push:
+  workflow_call:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: Compile LaTeX with Tectonic
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: '0'
-
-      - name: Create header.tex
-        working-directory: paper
-        run: |
-          rm -f header.tex
-
-          # Extract values from GitHub-provided environment variables
-          REPO="${{ github.repository }}"
-          REPO_NAME=$(basename "${REPO}")
-          BRANCH="${GITHUB_REF#refs/heads/}"
-          SHA="${GITHUB_SHA:0:7}"
-
-          # Escape LaTeX-sensitive characters (mainly underscores)
-          escape_latex() {
-            echo "$1" | sed -e 's/_/\\_/g'
-          }
-
-          REPO_ESC=$(escape_latex "$REPO_NAME")
-          BRANCH_ESC=$(escape_latex "$BRANCH")
-          SHA_ESC=$(escape_latex "$SHA")
-
-          # Construct commit URL
-          COMMIT_URL="https://github.com/$REPO/commit/${GITHUB_SHA}"
-
-          # Output single LaTeX hyperlink line
-          echo "\\href{$COMMIT_URL}{\\texttt{Repo: $REPO_ESC, Branch: $BRANCH_ESC, Version: $SHA_ESC}}" > header.tex
-
-          cat header.tex
-
-      - name: Compile LateX
-        uses: tschm/cradle/actions/latex@v0.3.06
-        with:
-          tex-file: document.tex
-          tex-folder: paper
-
-      - name: Upload compiled PDF
-        uses: actions/upload-artifact@v5
-        with:
-          name: paper-pdf
-          path: paper/compiled/*.pdf
+  build-latex:
+    uses: ./.github/workflows/latex-build.yml
+    with:
+      working-directory: 'paper'
+      tex-file: 'document.tex'
