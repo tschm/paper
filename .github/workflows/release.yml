@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Create and Push Tag
         run: |
@@ -46,7 +46,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Download compiled PDF
         uses: actions/download-artifact@v6
