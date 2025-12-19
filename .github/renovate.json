@@ -1,9 +1,0 @@
-{
-  "extends": [
-    "config:recommended",
-    ":enablePreCommit",
-    ":dependencyDashboard",
-    ":semanticCommits"
-  ],
-  "enabledManagers": ["pre-commit", "github-actions"]
-}
